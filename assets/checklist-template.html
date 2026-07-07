@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>签证材料清单 — {{COUNTRY}} {{VISA_TYPE}}</title>
+<style>
+  :root {
+    --green: #22c55e;
+    --yellow: #eab308;
+    --blue: #3b82f6;
+    --red: #ef4444;
+    --bg: #f8fafc;
+    --card: #fff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .container { max-width: 800px; margin:0 auto; }
+
+  /* Header */
+  .header {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .header h1 { font-size: 1.5rem; margin-bottom: 12px; }
+  .header .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    font-size: .9rem;
+    color: var(--muted);
+  }
+  .header .meta span { display: flex; align-items: center; gap: 6px; }
+  .header .meta strong { color: var(--text); }
+
+  /* Progress */
+  .progress-wrap {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .progress-wrap .label {
+    display: flex; justify-content: space-between;
+    font-size: .85rem; margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--green);
+    border-radius: 4px; transition: width .3s;
+    width: 0%;
+  }
+  .progress-wrap .done-count { font-weight: 600; color: var(--green); }
+
+  /* Category */
+  .category {
+    background: var(--card);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .category-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .category-header .dot {
+    width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+  }
+  .cat-essential .dot { background: var(--green); }
+  .cat-core .dot { background: var(--yellow); }
+  .cat-bonus .dot { background: var(--blue); }
+  .cat-special .dot { background: var(--red); }
+
+  .category-header .count {
+    margin-left: auto; font-size: .8rem; color: var(--muted); font-weight: 400;
+  }
+
+  /* Items */
+  .items { padding: 0 20px 14px; }
+  .item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 12px;
+    border-radius: 8px;
+    transition: background .15s;
+  }
+  .item:hover { background: #f1f5f9; }
+  .item input[type=checkbox] {
+    width: 20px; height: 20px; flex-shrink: 0;
+    accent-color: var(--green); cursor: pointer; margin-top: 2px;
+  }
+  .item label { flex:1; cursor: pointer; }
+  .item label .name { font-weight: 500; display: block; }
+  .item label .req { font-size: .82rem; color: var(--muted); margin-top: 2px; }
+  .item label .note {
+    font-size: .8rem; color: var(--red); margin-top: 2px;
+    background: #fef2f2; padding: 4px 8px; border-radius: 4px; display: inline-block;
+  }
+  .item input:checked + label .name {
+    text-decoration: line-through; color: var(--muted);
+  }
+  .item input:checked + label .req { text-decoration: line-through; }
+  .item input:checked + label .note { opacity: .5; }
+
+  /* Timeline */
+  .timeline {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .timeline h2 { font-size: 1.1rem; margin-bottom: 12px; }
+  .phase { margin-bottom: 12px; }
+  .phase .phase-title { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+  .phase .phase-detail { font-size: .85rem; color: var(--muted); }
+  .phase .phase-time { font-size: .8rem; color: var(--blue); float: right; }
+
+  /* Tips */
+  .tips {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .tips h2 { font-size: 1.1rem; margin-bottom: 10px; }
+  .tips ul { padding-left: 20px; font-size: .9rem; }
+  .tips li { margin-bottom: 6px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; color: var(--muted); font-size: .75rem;
+    padding: 20px; margin-top: 10px;
+  }
+  .footer a { color: var(--blue); }
+
+  /* Print */
+  @media print {
+    body { background:#fff; padding:0; }
+    .category, .header, .progress-wrap, .timeline, .tips { box-shadow:none; border:1px solid #ccc; }
+    input[type=checkbox] { -webkit-appearance:auto; border:1px solid #000; }
+    .item input:checked + label .name { text-decoration: line-through; }
+    .progress-wrap { display: none; }
+  }
+
+  /* Reset button */
+  .reset-btn {
+    display: block; margin: 0 auto 20px;
+    padding: 8px 20px; border: 1px solid var(--border);
+    background: var(--card); border-radius: 8px;
+    cursor: pointer; font-size: .85rem; color: var(--muted);
+  }
+  .reset-btn:hover { background: #f1f5f9; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>📋 {{COUNTRY}} {{VISA_TYPE}} 签证材料清单</h1>
+    <div class="meta">
+      <span>👤 申请人：<strong>{{APPLICANT_NAME}}</strong></span>
+      <span>📍 领区：<strong>{{CONSULAR_DISTRICT}}</strong></span>
+      <span>📅 出行日期：<strong>{{TRAVEL_DATES}}</strong></span>
+      <span>⏰ 建议启动：<strong>{{DEADLINE_TO_START}}</strong></span>
+      <span>🏷️ 签证类型：<strong>{{VISA_TYPE_DETAIL}}</strong></span>
+      <span>💰 预估费用：<strong>{{ESTIMATED_FEE}}</strong></span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="label"><span>准备进度</span><span><span class="done-count" id="doneCount">0</span> / <span id="totalCount">0</span> 项完成</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div id="checklist">
+    <!-- Categories and items will be inserted here by the skill -->
+    <!-- Template structure:
+    <div class="category cat-essential">
+      <div class="category-header"><span class="dot"></span>🟢 必备材料<span class="count">0/0</span></div>
+      <div class="items">
+        <div class="item">
+          <input type="checkbox" id="item-1">
+          <label for="item-1">
+            <span class="name">材料名称</span>
+            <span class="req">具体要求</span>
+            <span class="note">⚠️ 你的注意事项</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <h2>🗺️ 办理流程时间线</h2>
+    {{TIMELINE_CONTENT}}
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips">
+    <h2>⚠️ 关键提醒</h2>
+    {{TIPS_CONTENT}}
+  </div>
+
+  <!-- RESET -->
+  <button class="reset-btn" onclick="if(confirm('重置所有勾选？')){document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);updateProgress()}">🔄 重置所有勾选</button>
+
+  <div class="footer">
+    由 Claude Visa Assistant 生成 · {{DATE_GENERATED}}<br>
+    材料要求可能随时变化，请以官方最新公告为准
+  </div>
+</div>
+
+<script>
+function updateProgress() {
+  const all = document.querySelectorAll('#checklist input[type=checkbox]');
+  const done = document.querySelectorAll('#checklist input[type=checkbox]:checked');
+  const total = all.length;
+  const doneN = done.length;
+  const pct = total ? Math.round(doneN / total * 100) : 0;
+
+  document.getElementById('doneCount').textContent = doneN;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Update category counts
+  document.querySelectorAll('.category').forEach(cat => {
+    const catAll = cat.querySelectorAll('input[type=checkbox]');
+    const catDone = cat.querySelectorAll('input[type=checkbox]:checked');
+    const countEl = cat.querySelector('.count');
+    if (countEl) countEl.textContent = catDone.length + '/' + catAll.length;
+  });
+
+  // Persist to localStorage
+  const state = {};
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
+    state['item-' + i] = cb.checked;
+  });
+  localStorage.setItem('visa-checklist-state', JSON.stringify(state));
+}
+
+function loadProgress() {
+  const state = JSON.parse(localStorage.getItem('visa-checklist-state') || '{}');
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
+    if (state['item-' + i]) cb.checked = true;
+  });
+  updateProgress();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadProgress();
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', updateProgress);
+  });
+});
+
+// Handle category header collapse
+document.querySelectorAll('.category-header').forEach(header => {
+  header.addEventListener('click', function(e) {
+    if (e.target.tagName === 'INPUT') return;
+    const items = this.nextElementSibling;
+    if (items) items.style.display = items.style.display === 'none' ? '' : 'none';
+  });
+});
+</script>
+</body>
+</html>
