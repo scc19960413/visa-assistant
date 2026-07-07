@@ -3,581 +3,528 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>✈️ {{COUNTRY}} 签证清单 — {{APPLICANT_NAME}} 的旅行准备</title>
+<title>✈️ 意大利+瑞士 — 签证准备手账</title>
 <style>
+  /* ====== DESIGN SYSTEM ====== */
   :root {
-    --primary: {{PRIMARY_COLOR}};
-    --secondary: {{SECONDARY_COLOR}};
-    --accent: {{ACCENT_COLOR}};
-    --bg: #fdf6f0;
-    --bg2: #fff9f5;
-    --card: #ffffff;
-    --text: #3d2c2c;
-    --muted: #8b7b7b;
-    --border: #f0e6dd;
-    --essential: #27ae60;
-    --core: #f39c12;
-    --bonus: #3498db;
-    --special: #e74c3c;
-    --shadow: 0 2px 16px rgba(180,140,120,0.08);
-    --shadow-hover: 0 6px 28px rgba(180,140,120,0.15);
-    --radius: 16px;
+    --ink: #2D2B2A;
+    --ink-light: #6B6866;
+    --ink-muted: #9B9895;
+    --paper: #FAF7F2;
+    --card: #FFFFFF;
+    --border: #EDE8E2;
+    --border-hover: #DDD6CC;
+    --coral: #E85D5D;
+    --coral-soft: #FFF0ED;
+    --amber: #E8962E;
+    --amber-soft: #FFF6EB;
+    --sage: #69B578;
+    --sage-soft: #EEF7F0;
+    --sky: #5B9BD5;
+    --sky-soft: #EDF4FA;
+    --radius-lg: 20px;
+    --radius-md: 14px;
     --radius-sm: 10px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.05);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.07);
+    --transition: .25s cubic-bezier(.4,0,.2,1);
   }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
   body {
-    font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    background-image:
-      radial-gradient(ellipse at 10% 20%, {{PRIMARY_COLOR}}08 0%, transparent 50%),
-      radial-gradient(ellipse at 90% 80%, {{SECONDARY_COLOR}}08 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, {{ACCENT_COLOR}}06 0%, transparent 60%);
-    color: var(--text);
-    line-height: 1.7;
-    padding: 24px 16px 60px;
-    min-height: 100vh;
+    font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .container { max-width: 780px; margin:0 auto; }
+  /* Subtle paper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(232,93,93,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 90%, rgba(91,155,213,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(232,150,46,0.02) 0%, transparent 60%);
+  }
 
-  /* ======== HERO ======== */
+  .page { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; position: relative; z-index: 1; }
+
+  /* ====== HERO — travel journal cover ====== */
   .hero {
     background: var(--card);
-    border-radius: 24px;
-    padding: 36px 32px 28px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--border);
   }
-  .hero::before {
+  .hero::after {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-    border-radius: 24px 24px 0 0;
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--coral), var(--amber), var(--sky));
   }
-  .hero-flag {
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 8px;
-    animation: float 3s ease-in-out infinite;
+  .hero-flag { font-size: 3.5rem; margin-bottom: 8px; display: block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-flag { animation: gentle-float 4s ease-in-out infinite; }
   }
-  @keyframes float {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
+  @keyframes gentle-float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
   }
-  .hero-destination {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .hero-emojis {
+    display: flex; justify-content: center; gap: 8px; font-size: 2rem;
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .hero h1 {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 800; letter-spacing: -.5px; margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--coral), var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 4px;
   }
-  .hero-subtitle {
-    text-align: center;
-    font-size: .9rem;
-    color: var(--muted);
-    margin-bottom: 16px;
+  .hero .subtitle { font-size: .88rem; color: var(--ink-muted); margin-bottom: 18px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .tag {
+    background: var(--paper); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 14px; font-size: .78rem;
+    color: var(--ink-light); display: flex; align-items: center; gap: 5px;
+    transition: border-color var(--transition);
   }
-  .hero-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-  }
-  .hero-tag {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: .8rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .hero-tag strong { color: var(--text); font-weight: 600; }
-  .hero-illustration {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    font-size: 2.5rem;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-  .hero-greeting {
-    text-align: center;
-    font-style: italic;
-    color: var(--muted);
-    font-size: .85rem;
-    margin-top: 8px;
-  }
+  .tag:hover { border-color: var(--border-hover); }
+  .tag strong { color: var(--ink); font-weight: 600; }
+  .hero .greeting { font-size: .82rem; color: var(--ink-muted); font-style: italic; margin-top: 14px; }
 
-  /* ======== PROGRESS ======== */
+  /* ====== PROGRESS BAR ====== */
   .progress-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 18px 24px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 18px 24px;
+    margin-bottom: 20px; box-shadow: var(--shadow-sm);
   }
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: .9rem;
-  }
-  .progress-header .emoji { font-size: 1.3rem; }
-  .progress-header .stats { font-weight: 600; }
-  .progress-header .stats .done { color: var(--essential); font-size: 1.1rem; }
+  .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-top .label { font-size: .85rem; font-weight: 600; color: var(--ink); }
+  .progress-top .count { font-size: .82rem; color: var(--ink-muted); }
+  .progress-top .count b { color: var(--sage); font-size: 1.05rem; }
   .progress-track {
-    height: 10px;
-    background: var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
+    height: 6px; background: var(--border); border-radius: 6px;
+    overflow: hidden; position: relative;
   }
   .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-    border-radius: 10px;
-    transition: width .4s cubic-bezier(.4,0,.2,1);
-    position: relative;
+    height: 100%; width: 0%; border-radius: 6px;
+    background: linear-gradient(90deg, var(--coral), var(--amber), var(--sage));
+    transition: width .5s cubic-bezier(.4,0,.2,1);
   }
-  .progress-fill::after {
-    content: '✈️';
-    position: absolute;
-    right: -8px;
-    top: -16px;
-    font-size: .85rem;
-    animation: fly 0.3s ease-out;
-  }
-  @keyframes fly { from { transform: translateX(-20px); opacity:0; } }
-  .progress-msg {
-    text-align: center;
-    font-size: .8rem;
-    color: var(--muted);
-    margin-top: 8px;
-    font-style: italic;
-  }
+  .progress-msg { text-align: center; font-size: .78rem; color: var(--ink-muted); margin-top: 8px; font-style: italic; }
 
-  /* ======== CHECKLIST ======== */
-  .category {
-    background: var(--card);
-    border-radius: var(--radius);
-    margin-bottom: 14px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: box-shadow .2s, transform .2s;
+  /* ====== CATEGORY CARDS ====== */
+  .cat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); margin-bottom: 14px;
+    box-shadow: var(--shadow-sm); transition: box-shadow var(--transition), border-color var(--transition);
   }
-  .category:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
-
+  .cat:hover { border-color: var(--border-hover); box-shadow: var(--shadow-md); }
   .cat-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 20px;
-    cursor: pointer;
-    user-select: none;
-    border-radius: var(--radius) var(--radius) 0 0;
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; cursor: pointer; user-select: none;
     transition: background .15s;
   }
-  .cat-header:hover { background: var(--bg2); }
-  .cat-icon {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
+  .cat-header:hover { background: rgba(0,0,0,.012); }
+  .cat-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
   }
-  .cat-essential .cat-icon { background: #e8f8ef; }
-  .cat-core .cat-icon { background: #fef5e7; }
-  .cat-bonus .cat-icon { background: #eaf4fd; }
-  .cat-special .cat-icon { background: #fdeaea; }
+  .cat-essential .cat-dot { background: var(--sage); }
+  .cat-core .cat-dot { background: var(--amber); }
+  .cat-bonus .cat-dot { background: var(--sky); }
 
-  .cat-title { font-weight: 700; font-size: .95rem; flex:1; }
-  .cat-count {
-    font-size: .75rem; color: var(--muted); font-weight: 400;
-    background: var(--bg2); padding: 3px 10px; border-radius: 12px;
+  .cat-header h2 { font-size: .92rem; font-weight: 700; flex: 1; }
+  .cat-badge {
+    font-size: .72rem; color: var(--ink-muted);
+    background: var(--paper); padding: 3px 10px; border-radius: 12px;
+    font-weight: 500;
   }
+
+  /* Category state via :has() — 2026 CSS! */
+  .cat:has(input:not(:checked)) { border-left: 3px solid transparent; }
+  .cat:not(:has(input:not(:checked))) {
+    border-left: 3px solid var(--sage);
+    background: var(--sage-soft);
+  }
+  .cat:not(:has(input:not(:checked))) .cat-dot { box-shadow: 0 0 0 4px var(--sage-soft); }
 
   .cat-body { padding: 0 16px 14px; }
   .cat-body.collapsed { display: none; }
 
-  /* ======== ITEM ======== */
+  /* ====== CHECKLIST ITEMS ====== */
   .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 10px;
-    border-radius: var(--radius-sm);
-    transition: all .2s;
-    border: 1px solid transparent;
-    position: relative;
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 10px; border-radius: var(--radius-sm);
+    transition: background .15s; border: 1px solid transparent;
+    min-height: 48px; /* touch target */
   }
-  .item:hover {
-    background: var(--bg2);
-    border-color: var(--border);
-  }
-  .item.done {
-    background: #f8fdf8;
-  }
-  .item.done .item-name { text-decoration: line-through; color: var(--muted); }
-  .item.done .item-req { opacity: .6; }
-  .item.done .item-note { opacity: .5; }
+  .item:hover { background: rgba(0,0,0,.015); }
 
   /* Custom checkbox */
-  .cb-wrap {
-    position: relative;
-    width: 24px; height: 24px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    cursor: pointer;
-  }
+  .cb-wrap { position: relative; width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; }
   .cb-wrap input { position: absolute; opacity: 0; width: 0; height: 0; }
   .cb-mark {
-    width: 24px; height: 24px;
-    border: 2px solid #d4c5b5;
-    border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .25s cubic-bezier(.4,0,.2,1);
-    background: #fff;
-    font-size: .7rem;
-    color: transparent;
+    width: 22px; height: 22px; border: 2px solid #D5CFC8;
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition); background: #fff; cursor: pointer;
   }
   .cb-wrap input:checked + .cb-mark {
-    background: var(--essential);
-    border-color: var(--essential);
-    color: #fff;
-    transform: scale(1.1);
-    animation: pop .3s cubic-bezier(.4,0,.2,1);
+    background: var(--sage); border-color: var(--sage); color: #fff;
+    animation: pop .35s cubic-bezier(.4,0,.2,1);
   }
+  .cb-wrap input:checked + .cb-mark::after { content: '✓'; font-size: .75rem; font-weight: 700; }
   @keyframes pop {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.25); }
-    100% { transform: scale(1.1); }
-  }
-  .cb-wrap input:checked + .cb-mark::after {
-    content: '✓';
+    0% { transform: scale(1); } 40% { transform: scale(1.2); } 100% { transform: scale(1); }
   }
 
-  /* Item content */
-  .item-content { flex:1; }
-  .item-name { font-weight: 600; font-size: .9rem; display: block; margin-bottom: 2px; transition: color .2s; }
-  .item-req { font-size: .78rem; color: var(--muted); display: block; }
+  /* Checked state via :has() */
+  .item:has(input:checked) .item-name { text-decoration: line-through; color: var(--ink-muted); }
+  .item:has(input:checked) .item-req { color: var(--ink-muted); opacity: .6; }
+  .item:has(input:checked) .item-note { opacity: .4; }
+  .item:has(input:checked) { background: rgba(105,181,120,.03); }
+
+  .item-content { flex: 1; min-width: 0; }
+  .item-name { font-weight: 600; font-size: .88rem; display: block; margin-bottom: 2px; transition: color .2s; }
+  .item-req { font-size: .76rem; color: var(--ink-muted); display: block; line-height: 1.5; }
   .item-note {
-    font-size: .75rem; color: #c0392b;
-    background: #fef5f5; padding: 5px 10px; border-radius: 8px;
-    display: inline-block; margin-top: 5px;
-    border-left: 3px solid #e74c3c;
+    font-size: .73rem; color: var(--coral);
+    background: var(--coral-soft); padding: 5px 10px; border-radius: 6px;
+    display: inline-block; margin-top: 5px; font-weight: 500;
   }
 
-  /* ======== TIPS + TIMELINE ======== */
-  .info-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
+  /* ====== INFO CARDS ====== */
+  .info {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 24px;
+    margin-bottom: 16px; box-shadow: var(--shadow-sm);
   }
-  .info-card h3 {
-    font-size: 1rem; margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .phase {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-  .phase:last-child { border-bottom: none; }
-  .phase-num {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #fff; font-weight: 700; font-size: .8rem;
+  .info h3 { font-size: .95rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .step { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px dashed var(--border); align-items: flex-start; }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--amber));
+    color: #fff; font-weight: 700; font-size: .78rem;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+    flex-shrink: 0; box-shadow: 0 2px 8px rgba(232,93,93,.2);
   }
-  .phase-info { flex:1; }
-  .phase-title { font-weight: 600; font-size: .85rem; }
-  .phase-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; }
-  .phase-time { font-size: .75rem; color: var(--secondary); font-weight: 600; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; font-size: .84rem; }
+  .step-desc { font-size: .78rem; color: var(--ink-muted); margin-top: 2px; }
+  .step-time { font-size: .73rem; color: var(--amber); font-weight: 600; margin-top: 3px; }
 
-  .tips-list { padding-left: 18px; font-size: .85rem; }
-  .tips-list li { margin-bottom: 6px; }
-  .tips-list li::marker { content: '💡 '; }
+  .tips { list-style: none; font-size: .82rem; }
+  .tips li { padding: 6px 0; padding-left: 18px; position: relative; }
+  .tips li::before { content: '•'; position: absolute; left: 2px; color: var(--coral); font-weight: 700; }
 
-  /* ======== QUOTE ======== */
-  .quote {
-    text-align: center;
-    padding: 24px 20px;
-    font-style: italic;
-    color: var(--muted);
-    font-size: .85rem;
-    line-height: 1.8;
-  }
-  .quote .line {
-    display: block;
-    font-size: .95rem;
-    color: var(--text);
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
-  .quote .attribution { font-size: .75rem; }
+  /* ====== FOOD CORNER ====== */
+  .food-corner { text-align: center; }
+  .food-corner .food-emojis { font-size: 2.2rem; margin: 10px 0; letter-spacing: 4px; }
+  .food-corner p { font-size: .8rem; color: var(--ink-muted); max-width: 420px; margin: 0 auto; line-height: 1.7; }
 
-  /* ======== CELEBRATION ======== */
-  .confetti { position: fixed; pointer-events: none; z-index: 999; }
-  .confetti-piece {
-    position: absolute;
-    width: 10px; height: 10px;
-    border-radius: 3px;
-    animation: confetti-fall 2s ease-out forwards;
+  /* ====== QUOTE ====== */
+  .quote-block {
+    text-align: center; padding: 28px 20px;
+    font-style: italic; color: var(--ink-muted);
   }
-  @keyframes confetti-fall {
-    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
+  .quote-block q { font-size: .92rem; color: var(--ink); font-weight: 500; display: block; margin-bottom: 6px; }
+  .quote-block .attr { font-size: .75rem; }
 
-  /* ======== BUTTONS ======== */
-  .btn-row { text-align: center; margin: 16px 0; }
+  /* ====== BUTTONS ====== */
+  .btn-row { text-align: center; margin: 20px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .btn {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 24px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    border-radius: 24px;
-    font-size: .85rem; color: var(--muted);
-    cursor: pointer;
-    transition: all .2s;
-    margin: 0 6px;
+    padding: 10px 22px; border: 1px solid var(--border);
+    background: var(--card); border-radius: 24px;
+    font-size: .83rem; color: var(--ink-light);
+    cursor: pointer; transition: all var(--transition);
+    font-family: inherit; min-height: 44px;
   }
-  .btn:hover { background: var(--bg2); border-color: var(--primary); color: var(--primary); }
-  .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .btn.primary:hover { filter: brightness(1.1); }
+  .btn:hover { background: var(--paper); border-color: var(--border-hover); color: var(--ink); }
 
-  /* ======== PRINT ======== */
+  /* ====== CELEBRATION ====== */
+  @media (prefers-reduced-motion: no-preference) {
+    .confetti-piece {
+      position: fixed; pointer-events: none; z-index: 999;
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-120px) rotate(0deg) scale(1); opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg) scale(.5); opacity: 0; }
+    }
+  }
+
+  /* ====== PRINT ====== */
   @media print {
-    body { background:#fff; padding:0; color:#000; }
-    .hero::before { background: #000; }
-    .hero-destination { -webkit-text-fill-color: #000; }
-    .progress-card, .btn-row, .confetti { display:none; }
-    .category, .info-card { box-shadow:none; border:1px solid #ccc; break-inside:avoid; }
-    .cb-mark { border-color:#999; }
-    .cb-wrap input:checked + .cb-mark { background:#fff; border-color:#000; color:#000; }
-    .hero-flag { animation:none; }
+    body { background: #fff; }
+    body::before { display: none; }
+    .progress-card, .btn-row { display: none; }
+    .cat, .info, .hero { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .hero h1 { -webkit-text-fill-color: #000; }
+    .cb-mark { border-color: #999; }
+    .cb-wrap input:checked + .cb-mark { background: #fff; border-color: #000; color: #000; }
+    .item:has(input:checked) { background: transparent; }
+    .hero-flag { animation: none; }
   }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
   <!-- ====== HERO ====== -->
   <div class="hero">
-    <div class="hero-flag">{{FLAG_EMOJI}}</div>
-    <div class="hero-illustration">{{HERO_EMOJIS}}</div>
-    <h1 class="hero-destination">{{COUNTRY}} · {{VISA_TYPE}}</h1>
-    <p class="hero-subtitle">{{APPLICANT_NAME}} 的旅行准备手册</p>
-    <div class="hero-meta">
-      <span class="hero-tag">📅 <strong>{{TRAVEL_DATES}}</strong></span>
-      <span class="hero-tag">📍 <strong>{{CONSULAR_DISTRICT}}</strong></span>
-      <span class="hero-tag">⏰ <strong>建议{{DEADLINE_TO_START}}前启动</strong></span>
-      <span class="hero-tag">💰 约 <strong>{{ESTIMATED_FEE}}</strong></span>
+    <span class="hero-flag">🇮🇹</span>
+    <div class="hero-emojis">🏛️ 🍝 🍷 🛵</div>
+    <h1>意大利+瑞士 · 旅游签证</h1>
+    <p class="subtitle">国庆旅行准备手账</p>
+    <div class="hero-tags">
+      <span class="tag">📅 <strong>10.1 – 10.7</strong></span>
+      <span class="tag">📍 <strong>上海领区</strong></span>
+      <span class="tag">⏰ <strong>7月15日前预约</strong></span>
+      <span class="tag">💰 <strong>~800 元</strong></span>
     </div>
-    <p class="hero-greeting">{{GREETING}}</p>
+    <p class="greeting">La dolce vita! 甜蜜的生活即将开始 ✨</p>
   </div>
 
   <!-- ====== PROGRESS ====== -->
   <div class="progress-card">
-    <div class="progress-header">
-      <span class="emoji">🧳</span>
-      <span class="stats">准备好了 <span class="done" id="doneCount">0</span> / <span id="totalCount">0</span> 项</span>
-      <span class="emoji">🎯</span>
+    <div class="progress-top">
+      <span class="label">🧳 准备进度</span>
+      <span class="count">已完成 <b id="doneCount">0</b> / <span id="totalCount">0</span> 项</span>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-msg" id="progressMsg">{{PROGRESS_EMPTY_MSG}}</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <p class="progress-msg" id="progressMsg">还没开始？别担心，罗马不是一天建成的 🏗️</p>
   </div>
 
   <!-- ====== CHECKLIST ====== -->
-  <div id="checklist">
-    {{CHECKLIST_HTML}}
+
+  <!-- 🟢 Essential -->
+  <div class="cat cat-essential">
+    <div class="cat-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+      <div class="cat-dot"></div>
+      <h2>必备材料 — 缺一不可</h2>
+      <span class="cat-badge">0/5</span>
+    </div>
+    <div class="cat-body">
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">护照原件 + 复印件</span><span class="item-req">有效期 &gt; 2027年4月，至少2页连续空白页</span><span class="item-note">现在就检查有效期！临递交才发现过期的惨案太多了</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">申根签证申请表</span><span class="item-req">VFS Global 在线填写，英文，打印并手写签名</span><span class="item-note">签证类型选 Turismo，停留天数填 7 天</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">白底证件照 ×2</span><span class="item-req">35mm × 45mm，近6个月拍摄，露五官无美颜</span><span class="item-note">别跟日韩签证照重复，要新拍的</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">户口本整本彩色复印件</span><span class="item-req">所有页，无需翻译</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">身份证正反面复印件</span><span class="item-req">清晰彩色复印</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🟡 Core -->
+  <div class="cat cat-core">
+    <div class="cat-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+      <div class="cat-dot"></div>
+      <h2>财力 + 职业证明 — 审核核心</h2>
+      <span class="cat-badge">0/4</span>
+    </div>
+    <div class="cat-body">
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">英文在职证明</span><span class="item-req">公司抬头纸，注明职位 / 月薪 / 入职年限 / 10.1–10.7 准假 / 回国保留职位承诺。盖公章 + 负责人签字</span><span class="item-note">找 HR 开，别漏了「准假 + 保留职位」这两句</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">营业执照副本复印件</span><span class="item-req">加盖公章</span><span class="item-note">找行政，一秒钟的事</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">近6个月工资卡银行流水</span><span class="item-req">余额 ≥ 3–5 万元，体现稳定工资入账</span><span class="item-note">⚠️ 现在开始不要任何大额转账！让流水自然来</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">存款证明（备份）</span><span class="item-req">2026 新政不强制，流水余额够就不用</span><span class="item-note">流水余额偏低就补一个，5 万冻结 3 个月</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔵 Bonus -->
+  <div class="cat cat-bonus">
+    <div class="cat-header" onclick="this.nextElementSibling.classList.toggle('collapsed')">
+      <div class="cat-dot"></div>
+      <h2>行程 + 辅助材料 — 加分装备</h2>
+      <span class="cat-badge">0/6</span>
+    </div>
+    <div class="cat-body">
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">英文行程单</span><span class="item-req">7天每日详细安排，意大利4晚 &gt; 瑞士2晚，每天2–3个景点</span><span class="item-note">已生成 → itinerary-italy-swiss-7days-20260707.md</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">往返机票预订单</span><span class="item-req">上海→罗马 / 苏黎世→上海，可退改或未付款预订单</span><span class="item-note">出签前别付款！携程下单不付钱就能打印预订单</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">全程酒店预订单</span><span class="item-req">Booking 订可免费取消的，英文确认单，覆盖全程</span><span class="item-note">罗马2晚 + 佛罗伦萨2晚 + 卢塞恩2晚，日期要对上</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">旅行医疗保险</span><span class="item-req">保额 ≥ 3万欧元（约23万人民币），覆盖申根全境</span><span class="item-note">支付宝搜「申根保险」，前后多买1天防延误</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">房产证 / 车产证</span><span class="item-req">复印件 + 英文翻译（如有）</span><span class="item-note">加分利器，证明你在中国有资产</span></div>
+      </div>
+      <div class="item">
+        <label class="cb-wrap"><input type="checkbox" onchange="update()"><span class="cb-mark"></span></label>
+        <div class="item-content"><span class="item-name">旧护照 + 签证页复印件</span><span class="item-req">韩国、日本、阿联酋的签证页 + 出入境章</span><span class="item-note">证明你是正经旅行者，这个记录很不错</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- ====== TIMELINE ====== -->
-  <div class="info-card">
+  <div class="info">
     <h3>🗺️ 办理路线图</h3>
-    {{TIMELINE_CONTENT}}
+    <div class="step"><div class="step-num">1</div><div class="step-content"><div class="step-title">抢预约！VFS Global 上海</div><div class="step-desc">周二/周四上午 10:00 放号，9:55 蹲守。VIP 通道 240 元可兜底</div><div class="step-time">⏱ 7月15日前必须搞定</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><div class="step-title">准备全部材料</div><div class="step-desc">开在职证明、打流水、订机酒、做行程单、买保险、拍照片</div><div class="step-time">⏱ 7月 – 8月中旬</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><div class="step-title">本人到签证中心递交</div><div class="step-desc">上海久事商务大厦 3 楼，带齐材料 + 到场录指纹（2026 新规：必须本人到场）</div><div class="step-time">⏱ 理想 8 月中下旬</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><div class="step-title">等待审核</div><div class="step-desc">正常 5–15 工作日，旺季可能 20–30 天。保持电话畅通，可能电调</div><div class="step-time">⏱ 8月底 – 9月中</div></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><div class="step-title">出签！收拾行李！</div><div class="step-desc">拿到护照检查签证信息。收拾行李，意大利见 🇮🇹</div><div class="step-time">🎉 9月20日前</div></div></div>
   </div>
 
   <!-- ====== TIPS ====== -->
-  <div class="info-card">
+  <div class="info">
     <h3>💡 签证官最看重的几件事</h3>
-    <ul class="tips-list">
-      {{TIPS_CONTENT}}
+    <ul class="tips">
+      <li><strong>行程合理</strong>：7天意大利4晚 &gt; 瑞士2晚，每天2–3个景点，火车连接而非飞行</li>
+      <li><strong>流水真实</strong>：不要突击转入。工资卡流水自然来，余额3–5万即可</li>
+      <li><strong>回国约束力</strong>：在职证明 + 房产证 + 家庭关系 = 你会回来的证据链</li>
+      <li><strong>出境记录好</strong>：韩国日本阿联酋的出入境章是加分项，旧护照记得带上</li>
+      <li><strong>所有材料日期闭环</strong>：行程单、机酒、保险的日期必须一致，AI 审核会交叉比对</li>
     </ul>
   </div>
 
   <!-- ====== FOOD & CULTURE ====== -->
-  <div class="info-card" style="text-align:center;">
-    <h3 style="justify-content:center;">{{COUNTRY}} 在等你 🍽️</h3>
-    <div style="font-size:2rem;margin:12px 0;">{{FOOD_EMOJIS}}</div>
-    <p style="font-size:.82rem;color:var(--muted);">{{FOOD_CULTURE_NOTE}}</p>
+  <div class="info food-corner">
+    <h3 style="justify-content:center;">意大利 + 瑞士 在等你 🍽️</h3>
+    <div class="food-emojis">🍕 🍝 🍦 ☕ 🧀 🍫</div>
+    <p>从那不勒斯披萨到佛罗伦萨牛排，从罗马冰淇淋到托斯卡纳红酒……再加上瑞士的芝士火锅和手工巧克力。每一口都是艺术，每一站都是风景。</p>
   </div>
 
   <!-- ====== QUOTE ====== -->
-  <div class="quote">
-    <span class="line">"{{TRAVEL_QUOTE}}"</span>
-    <span class="attribution">— {{QUOTE_ATTRIBUTION}}</span>
+  <div class="quote-block">
+    <q>Italy is a dream that keeps returning for the rest of your life.</q>
+    <span class="attr">— Anna Akhmatova</span>
   </div>
 
   <!-- ====== BUTTONS ====== -->
   <div class="btn-row">
     <button class="btn" onclick="resetAll()">🔄 重新来过</button>
-    <button class="btn" onclick="window.print()">🖨️ 打印清单</button>
+    <button class="btn" onclick="window.print()">🖨️ 打印手账</button>
   </div>
 
-  <div style="text-align:center;color:var(--muted);font-size:.7rem;padding:20px;">
-    🛂 由 Claude Visa Assistant 生成 · {{DATE_GENERATED}}<br>
-    材料要求以官方最新公告为准 · 祝你旅途愉快 ✨
-  </div>
+  <p style="text-align:center;color:var(--ink-muted);font-size:.7rem;padding:12px;">
+    🐭 鼠鼠签证助手 · 2026.07.08 · 材料以官方最新公告为准 · Buon viaggio! ✨
+  </p>
 </div>
 
 <script>
-// ======== STATE ========
-const PROGRESS_MSGS = {
-  empty: '{{PROGRESS_EMPTY_MSG}}',
-  start: '{{PROGRESS_START_MSG}}',
-  halfway: '{{PROGRESS_HALFWAY_MSG}}',
-  almost: '{{PROGRESS_ALMOST_MSG}}',
-  done: '{{PROGRESS_DONE_MSG}}'
+const MSGS = {
+  '0': '还没开始？别担心，罗马不是一天建成的 🏗️',
+  '30': '好的开始！斗兽场在向你招手 🏟️',
+  '60': '过半啦！你已经比一半人更接近意大利了 🛵',
+  '85': '快了！别忘了给妈妈带个 Gucci 👜',
+  '100': 'Tutto pronto! 一切就绪，去拥抱甜蜜的生活吧！🍷✨'
 };
 
-function updateProgress() {
-  const all = document.querySelectorAll('#checklist input[type=checkbox]');
-  const done = document.querySelectorAll('#checklist input[type=checkbox]:checked');
-  const total = all.length;
-  const n = done.length;
-  const pct = total ? Math.round(n / total * 100) : 0;
+function update() {
+  const all = [...document.querySelectorAll('.cat-body input[type=checkbox]')];
+  const done = all.filter(cb => cb.checked);
+  const n = done.length, t = all.length, pct = t ? Math.round(n/t*100) : 0;
 
   document.getElementById('doneCount').textContent = n;
-  document.getElementById('totalCount').textContent = total;
+  document.getElementById('totalCount').textContent = t;
   document.getElementById('progressFill').style.width = pct + '%';
 
-  // Message
-  const msgEl = document.getElementById('progressMsg');
-  if (n === 0) msgEl.textContent = PROGRESS_MSGS.empty;
-  else if (n < total * 0.4) msgEl.textContent = PROGRESS_MSGS.start;
-  else if (n < total * 0.7) msgEl.textContent = PROGRESS_MSGS.halfway;
-  else if (n < total) msgEl.textContent = PROGRESS_MSGS.almost;
-  else {
-    msgEl.textContent = PROGRESS_MSGS.done;
-    if (n === total && !window._confettiFired) {
-      window._confettiFired = true;
-      celebrate();
-    }
-  }
+  const msg = pct === 0 ? MSGS['0']
+    : pct === 100 ? MSGS['100']
+    : pct >= 85 ? MSGS['85']
+    : pct >= 60 ? MSGS['60']
+    : MSGS['30'];
+  document.getElementById('progressMsg').textContent = msg;
 
-  // Per category counts
-  document.querySelectorAll('.category').forEach(cat => {
-    const catAll = cat.querySelectorAll('input[type=checkbox]');
-    const catDone = cat.querySelectorAll('input[type=checkbox]:checked');
-    const countEl = cat.querySelector('.cat-count');
-    if (countEl) countEl.textContent = catDone.length + '/' + catAll.length;
-  });
-
-  // Item done class
-  document.querySelectorAll('.item').forEach(item => {
-    const cb = item.querySelector('input[type=checkbox]');
-    if (cb && cb.checked) item.classList.add('done');
-    else item.classList.remove('done');
+  document.querySelectorAll('.cat').forEach(cat => {
+    const ca = cat.querySelectorAll('.cat-body input[type=checkbox]');
+    const cd = cat.querySelectorAll('.cat-body input[type=checkbox]:checked');
+    cat.querySelector('.cat-badge').textContent = cd.length + '/' + ca.length;
   });
 
   // Persist
-  const state = {};
-  document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
-    state['i' + i] = cb.checked;
-  });
-  localStorage.setItem('visa-checklist-' + '{{COUNTRY}}', JSON.stringify(state));
+  const state = {}; all.forEach((cb,i) => state['i'+i] = cb.checked);
+  localStorage.setItem('visa-italy-swiss', JSON.stringify(state));
 
-  // Reset confetti flag if not all done
-  if (n < total) window._confettiFired = false;
+  // Celebrate
+  if (pct === 100 && !window._done) { window._done = true; confetti(); }
+  if (pct < 100) window._done = false;
 }
 
-function loadState() {
-  const raw = localStorage.getItem('visa-checklist-' + '{{COUNTRY}}');
-  if (!raw) { updateProgress(); return; }
-  try {
-    const state = JSON.parse(raw);
-    document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
-      if (state['i' + i]) cb.checked = true;
+function confetti() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors = ['#E85D5D','#E8962E','#5B9BD5','#69B578','#FFD93D','#FF6B6B','#C084FC'];
+  for (let i=0; i<50; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    Object.assign(el.style, {
+      left: Math.random()*100 + '%', top: -(10 + Math.random()*30) + 'px',
+      width: (6 + Math.random()*8) + 'px', height: (6 + Math.random()*8) + 'px',
+      background: colors[Math.floor(Math.random()*colors.length)],
+      borderRadius: Math.random() > .5 ? '50%' : '2px',
+      animationDuration: (2 + Math.random()*2.5) + 's',
+      animationDelay: Math.random()*.4 + 's'
     });
-  } catch(e) {}
-  updateProgress();
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
 }
 
 function resetAll() {
-  if (confirm('确定要重置所有勾选记录吗？')) {
-    document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => cb.checked = false);
-    localStorage.removeItem('visa-checklist-' + '{{COUNTRY}}');
-    window._confettiFired = false;
-    updateProgress();
-  }
+  if (!confirm('确定要重置所有勾选吗？')) return;
+  document.querySelectorAll('.cat-body input[type=checkbox]').forEach(cb => cb.checked = false);
+  localStorage.removeItem('visa-italy-swiss');
+  window._done = false;
+  update();
 }
 
-// ======== CELEBRATION ========
-function celebrate() {
-  const colors = ['{{PRIMARY_COLOR}}','{{SECONDARY_COLOR}}','{{ACCENT_COLOR}}','#ffd93d','#6bcb77','#ff6b6b','#4d96ff'];
-  const container = document.createElement('div');
-  container.className = 'confetti';
-  container.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;';
-  document.body.appendChild(container);
-
-  for (let i = 0; i < 60; i++) {
-    setTimeout(() => {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.cssText = [
-        'left:' + Math.random() * 100 + '%',
-        'top:' + (-10 - Math.random() * 20) + 'px',
-        'background:' + colors[Math.floor(Math.random() * colors.length)],
-        'width:' + (6 + Math.random() * 10) + 'px',
-        'height:' + (6 + Math.random() * 10) + 'px',
-        'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
-        'animation-duration:' + (1.5 + Math.random() * 2.5) + 's',
-        'animation-delay:' + Math.random() * 0.5 + 's'
-      ].join(';');
-      container.appendChild(piece);
-    }, i * 30);
-  }
-
-  setTimeout(() => container.remove(), 3500);
-}
-
-// ======== INIT ========
-document.addEventListener('DOMContentLoaded', () => {
-  loadState();
-  document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', updateProgress);
-  });
-  document.querySelectorAll('.cat-header').forEach(h => {
-    h.addEventListener('click', function(e) {
-      if (e.target.tagName === 'INPUT') return;
-      this.nextElementSibling?.classList.toggle('collapsed');
+// Load state
+(function(){
+  const raw = localStorage.getItem('visa-italy-swiss');
+  if (raw) try {
+    const state = JSON.parse(raw);
+    document.querySelectorAll('.cat-body input[type=checkbox]').forEach((cb,i) => {
+      if (state['i'+i]) cb.checked = true;
     });
-  });
-});
+  } catch(e) {}
+  update();
+})();
 </script>
 </body>
 </html>
