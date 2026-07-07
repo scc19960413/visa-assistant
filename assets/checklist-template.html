@@ -3,288 +3,579 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>签证材料清单 — {{COUNTRY}} {{VISA_TYPE}}</title>
+<title>✈️ {{COUNTRY}} 签证清单 — {{APPLICANT_NAME}} 的旅行准备</title>
 <style>
   :root {
-    --green: #22c55e;
-    --yellow: #eab308;
-    --blue: #3b82f6;
-    --red: #ef4444;
-    --bg: #f8fafc;
-    --card: #fff;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #e2e8f0;
+    --primary: {{PRIMARY_COLOR}};
+    --secondary: {{SECONDARY_COLOR}};
+    --accent: {{ACCENT_COLOR}};
+    --bg: #fdf6f0;
+    --bg2: #fff9f5;
+    --card: #ffffff;
+    --text: #3d2c2c;
+    --muted: #8b7b7b;
+    --border: #f0e6dd;
+    --essential: #27ae60;
+    --core: #f39c12;
+    --bonus: #3498db;
+    --special: #e74c3c;
+    --shadow: 0 2px 16px rgba(180,140,120,0.08);
+    --shadow-hover: 0 6px 28px rgba(180,140,120,0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 20px;
-  }
-  .container { max-width: 800px; margin:0 auto; }
 
-  /* Header */
-  .header {
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 10% 20%, {{PRIMARY_COLOR}}08 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, {{SECONDARY_COLOR}}08 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, {{ACCENT_COLOR}}06 0%, transparent 60%);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px 60px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 780px; margin:0 auto; }
+
+  /* ======== HERO ======== */
+  .hero {
     background: var(--card);
-    border-radius: 12px;
-    padding: 24px 28px;
+    border-radius: 24px;
+    padding: 36px 32px 28px;
     margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--border);
   }
-  .header h1 { font-size: 1.5rem; margin-bottom: 12px; }
-  .header .meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 8px;
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    border-radius: 24px 24px 0 0;
+  }
+  .hero-flag {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 8px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+  .hero-destination {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  .hero-subtitle {
+    text-align: center;
     font-size: .9rem;
     color: var(--muted);
+    margin-bottom: 16px;
   }
-  .header .meta span { display: flex; align-items: center; gap: 6px; }
-  .header .meta strong { color: var(--text); }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .hero-tag {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: .8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .hero-tag strong { color: var(--text); font-weight: 600; }
+  .hero-illustration {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .hero-greeting {
+    text-align: center;
+    font-style: italic;
+    color: var(--muted);
+    font-size: .85rem;
+    margin-top: 8px;
+  }
 
-  /* Progress */
-  .progress-wrap {
+  /* ======== PROGRESS ======== */
+  .progress-card {
     background: var(--card);
-    border-radius: 12px;
-    padding: 16px 28px;
+    border-radius: var(--radius);
+    padding: 18px 24px;
     margin-bottom: 20px;
+    box-shadow: var(--shadow);
     border: 1px solid var(--border);
   }
-  .progress-wrap .label {
-    display: flex; justify-content: space-between;
-    font-size: .85rem; margin-bottom: 8px;
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: .9rem;
   }
-  .progress-bar {
-    height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+  .progress-header .emoji { font-size: 1.3rem; }
+  .progress-header .stats { font-weight: 600; }
+  .progress-header .stats .done { color: var(--essential); font-size: 1.1rem; }
+  .progress-track {
+    height: 10px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
   }
   .progress-fill {
-    height: 100%; background: var(--green);
-    border-radius: 4px; transition: width .3s;
+    height: 100%;
     width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    border-radius: 10px;
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+    position: relative;
   }
-  .progress-wrap .done-count { font-weight: 600; color: var(--green); }
+  .progress-fill::after {
+    content: '✈️';
+    position: absolute;
+    right: -8px;
+    top: -16px;
+    font-size: .85rem;
+    animation: fly 0.3s ease-out;
+  }
+  @keyframes fly { from { transform: translateX(-20px); opacity:0; } }
+  .progress-msg {
+    text-align: center;
+    font-size: .8rem;
+    color: var(--muted);
+    margin-top: 8px;
+    font-style: italic;
+  }
 
-  /* Category */
+  /* ======== CHECKLIST ======== */
   .category {
     background: var(--card);
-    border-radius: 12px;
-    margin-bottom: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
   }
-  .category-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 20px;
-    font-weight: 600;
-    font-size: 1rem;
+  .category:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
     cursor: pointer;
     user-select: none;
-  }
-  .category-header .dot {
-    width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
-  }
-  .cat-essential .dot { background: var(--green); }
-  .cat-core .dot { background: var(--yellow); }
-  .cat-bonus .dot { background: var(--blue); }
-  .cat-special .dot { background: var(--red); }
-
-  .category-header .count {
-    margin-left: auto; font-size: .8rem; color: var(--muted); font-weight: 400;
-  }
-
-  /* Items */
-  .items { padding: 0 20px 14px; }
-  .item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 12px 12px;
-    border-radius: 8px;
+    border-radius: var(--radius) var(--radius) 0 0;
     transition: background .15s;
   }
-  .item:hover { background: #f1f5f9; }
-  .item input[type=checkbox] {
-    width: 20px; height: 20px; flex-shrink: 0;
-    accent-color: var(--green); cursor: pointer; margin-top: 2px;
+  .cat-header:hover { background: var(--bg2); }
+  .cat-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
   }
-  .item label { flex:1; cursor: pointer; }
-  .item label .name { font-weight: 500; display: block; }
-  .item label .req { font-size: .82rem; color: var(--muted); margin-top: 2px; }
-  .item label .note {
-    font-size: .8rem; color: var(--red); margin-top: 2px;
-    background: #fef2f2; padding: 4px 8px; border-radius: 4px; display: inline-block;
-  }
-  .item input:checked + label .name {
-    text-decoration: line-through; color: var(--muted);
-  }
-  .item input:checked + label .req { text-decoration: line-through; }
-  .item input:checked + label .note { opacity: .5; }
+  .cat-essential .cat-icon { background: #e8f8ef; }
+  .cat-core .cat-icon { background: #fef5e7; }
+  .cat-bonus .cat-icon { background: #eaf4fd; }
+  .cat-special .cat-icon { background: #fdeaea; }
 
-  /* Timeline */
-  .timeline {
+  .cat-title { font-weight: 700; font-size: .95rem; flex:1; }
+  .cat-count {
+    font-size: .75rem; color: var(--muted); font-weight: 400;
+    background: var(--bg2); padding: 3px 10px; border-radius: 12px;
+  }
+
+  .cat-body { padding: 0 16px 14px; }
+  .cat-body.collapsed { display: none; }
+
+  /* ======== ITEM ======== */
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 10px;
+    border-radius: var(--radius-sm);
+    transition: all .2s;
+    border: 1px solid transparent;
+    position: relative;
+  }
+  .item:hover {
+    background: var(--bg2);
+    border-color: var(--border);
+  }
+  .item.done {
+    background: #f8fdf8;
+  }
+  .item.done .item-name { text-decoration: line-through; color: var(--muted); }
+  .item.done .item-req { opacity: .6; }
+  .item.done .item-note { opacity: .5; }
+
+  /* Custom checkbox */
+  .cb-wrap {
+    position: relative;
+    width: 24px; height: 24px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+  }
+  .cb-wrap input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .cb-mark {
+    width: 24px; height: 24px;
+    border: 2px solid #d4c5b5;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .25s cubic-bezier(.4,0,.2,1);
+    background: #fff;
+    font-size: .7rem;
+    color: transparent;
+  }
+  .cb-wrap input:checked + .cb-mark {
+    background: var(--essential);
+    border-color: var(--essential);
+    color: #fff;
+    transform: scale(1.1);
+    animation: pop .3s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.25); }
+    100% { transform: scale(1.1); }
+  }
+  .cb-wrap input:checked + .cb-mark::after {
+    content: '✓';
+  }
+
+  /* Item content */
+  .item-content { flex:1; }
+  .item-name { font-weight: 600; font-size: .9rem; display: block; margin-bottom: 2px; transition: color .2s; }
+  .item-req { font-size: .78rem; color: var(--muted); display: block; }
+  .item-note {
+    font-size: .75rem; color: #c0392b;
+    background: #fef5f5; padding: 5px 10px; border-radius: 8px;
+    display: inline-block; margin-top: 5px;
+    border-left: 3px solid #e74c3c;
+  }
+
+  /* ======== TIPS + TIMELINE ======== */
+  .info-card {
     background: var(--card);
-    border-radius: 12px;
-    padding: 20px 28px;
-    margin-bottom: 20px;
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
     border: 1px solid var(--border);
   }
-  .timeline h2 { font-size: 1.1rem; margin-bottom: 12px; }
-  .phase { margin-bottom: 12px; }
-  .phase .phase-title { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
-  .phase .phase-detail { font-size: .85rem; color: var(--muted); }
-  .phase .phase-time { font-size: .8rem; color: var(--blue); float: right; }
+  .info-card h3 {
+    font-size: 1rem; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .phase {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .phase:last-child { border-bottom: none; }
+  .phase-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff; font-weight: 700; font-size: .8rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .phase-info { flex:1; }
+  .phase-title { font-weight: 600; font-size: .85rem; }
+  .phase-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+  .phase-time { font-size: .75rem; color: var(--secondary); font-weight: 600; margin-top: 2px; }
 
-  /* Tips */
-  .tips {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 20px 28px;
-    margin-bottom: 20px;
+  .tips-list { padding-left: 18px; font-size: .85rem; }
+  .tips-list li { margin-bottom: 6px; }
+  .tips-list li::marker { content: '💡 '; }
+
+  /* ======== QUOTE ======== */
+  .quote {
+    text-align: center;
+    padding: 24px 20px;
+    font-style: italic;
+    color: var(--muted);
+    font-size: .85rem;
+    line-height: 1.8;
+  }
+  .quote .line {
+    display: block;
+    font-size: .95rem;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .quote .attribution { font-size: .75rem; }
+
+  /* ======== CELEBRATION ======== */
+  .confetti { position: fixed; pointer-events: none; z-index: 999; }
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    animation: confetti-fall 2s ease-out forwards;
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ======== BUTTONS ======== */
+  .btn-row { text-align: center; margin: 16px 0; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 24px;
     border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 24px;
+    font-size: .85rem; color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+    margin: 0 6px;
   }
-  .tips h2 { font-size: 1.1rem; margin-bottom: 10px; }
-  .tips ul { padding-left: 20px; font-size: .9rem; }
-  .tips li { margin-bottom: 6px; }
+  .btn:hover { background: var(--bg2); border-color: var(--primary); color: var(--primary); }
+  .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .btn.primary:hover { filter: brightness(1.1); }
 
-  /* Footer */
-  .footer {
-    text-align: center; color: var(--muted); font-size: .75rem;
-    padding: 20px; margin-top: 10px;
-  }
-  .footer a { color: var(--blue); }
-
-  /* Print */
+  /* ======== PRINT ======== */
   @media print {
-    body { background:#fff; padding:0; }
-    .category, .header, .progress-wrap, .timeline, .tips { box-shadow:none; border:1px solid #ccc; }
-    input[type=checkbox] { -webkit-appearance:auto; border:1px solid #000; }
-    .item input:checked + label .name { text-decoration: line-through; }
-    .progress-wrap { display: none; }
+    body { background:#fff; padding:0; color:#000; }
+    .hero::before { background: #000; }
+    .hero-destination { -webkit-text-fill-color: #000; }
+    .progress-card, .btn-row, .confetti { display:none; }
+    .category, .info-card { box-shadow:none; border:1px solid #ccc; break-inside:avoid; }
+    .cb-mark { border-color:#999; }
+    .cb-wrap input:checked + .cb-mark { background:#fff; border-color:#000; color:#000; }
+    .hero-flag { animation:none; }
   }
-
-  /* Reset button */
-  .reset-btn {
-    display: block; margin: 0 auto 20px;
-    padding: 8px 20px; border: 1px solid var(--border);
-    background: var(--card); border-radius: 8px;
-    cursor: pointer; font-size: .85rem; color: var(--muted);
-  }
-  .reset-btn:hover { background: #f1f5f9; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>📋 {{COUNTRY}} {{VISA_TYPE}} 签证材料清单</h1>
-    <div class="meta">
-      <span>👤 申请人：<strong>{{APPLICANT_NAME}}</strong></span>
-      <span>📍 领区：<strong>{{CONSULAR_DISTRICT}}</strong></span>
-      <span>📅 出行日期：<strong>{{TRAVEL_DATES}}</strong></span>
-      <span>⏰ 建议启动：<strong>{{DEADLINE_TO_START}}</strong></span>
-      <span>🏷️ 签证类型：<strong>{{VISA_TYPE_DETAIL}}</strong></span>
-      <span>💰 预估费用：<strong>{{ESTIMATED_FEE}}</strong></span>
+  <!-- ====== HERO ====== -->
+  <div class="hero">
+    <div class="hero-flag">{{FLAG_EMOJI}}</div>
+    <div class="hero-illustration">{{HERO_EMOJIS}}</div>
+    <h1 class="hero-destination">{{COUNTRY}} · {{VISA_TYPE}}</h1>
+    <p class="hero-subtitle">{{APPLICANT_NAME}} 的旅行准备手册</p>
+    <div class="hero-meta">
+      <span class="hero-tag">📅 <strong>{{TRAVEL_DATES}}</strong></span>
+      <span class="hero-tag">📍 <strong>{{CONSULAR_DISTRICT}}</strong></span>
+      <span class="hero-tag">⏰ <strong>建议{{DEADLINE_TO_START}}前启动</strong></span>
+      <span class="hero-tag">💰 约 <strong>{{ESTIMATED_FEE}}</strong></span>
     </div>
+    <p class="hero-greeting">{{GREETING}}</p>
   </div>
 
-  <!-- PROGRESS -->
-  <div class="progress-wrap">
-    <div class="label"><span>准备进度</span><span><span class="done-count" id="doneCount">0</span> / <span id="totalCount">0</span> 项完成</span></div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <!-- ====== PROGRESS ====== -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <span class="emoji">🧳</span>
+      <span class="stats">准备好了 <span class="done" id="doneCount">0</span> / <span id="totalCount">0</span> 项</span>
+      <span class="emoji">🎯</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-msg" id="progressMsg">{{PROGRESS_EMPTY_MSG}}</div>
   </div>
 
-  <!-- CHECKLIST -->
+  <!-- ====== CHECKLIST ====== -->
   <div id="checklist">
-    <!-- Categories and items will be inserted here by the skill -->
-    <!-- Template structure:
-    <div class="category cat-essential">
-      <div class="category-header"><span class="dot"></span>🟢 必备材料<span class="count">0/0</span></div>
-      <div class="items">
-        <div class="item">
-          <input type="checkbox" id="item-1">
-          <label for="item-1">
-            <span class="name">材料名称</span>
-            <span class="req">具体要求</span>
-            <span class="note">⚠️ 你的注意事项</span>
-          </label>
-        </div>
-      </div>
-    </div>
-    -->
+    {{CHECKLIST_HTML}}
   </div>
 
-  <!-- TIMELINE -->
-  <div class="timeline">
-    <h2>🗺️ 办理流程时间线</h2>
+  <!-- ====== TIMELINE ====== -->
+  <div class="info-card">
+    <h3>🗺️ 办理路线图</h3>
     {{TIMELINE_CONTENT}}
   </div>
 
-  <!-- TIPS -->
-  <div class="tips">
-    <h2>⚠️ 关键提醒</h2>
-    {{TIPS_CONTENT}}
+  <!-- ====== TIPS ====== -->
+  <div class="info-card">
+    <h3>💡 签证官最看重的几件事</h3>
+    <ul class="tips-list">
+      {{TIPS_CONTENT}}
+    </ul>
   </div>
 
-  <!-- RESET -->
-  <button class="reset-btn" onclick="if(confirm('重置所有勾选？')){document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);updateProgress()}">🔄 重置所有勾选</button>
+  <!-- ====== FOOD & CULTURE ====== -->
+  <div class="info-card" style="text-align:center;">
+    <h3 style="justify-content:center;">{{COUNTRY}} 在等你 🍽️</h3>
+    <div style="font-size:2rem;margin:12px 0;">{{FOOD_EMOJIS}}</div>
+    <p style="font-size:.82rem;color:var(--muted);">{{FOOD_CULTURE_NOTE}}</p>
+  </div>
 
-  <div class="footer">
-    由 Claude Visa Assistant 生成 · {{DATE_GENERATED}}<br>
-    材料要求可能随时变化，请以官方最新公告为准
+  <!-- ====== QUOTE ====== -->
+  <div class="quote">
+    <span class="line">"{{TRAVEL_QUOTE}}"</span>
+    <span class="attribution">— {{QUOTE_ATTRIBUTION}}</span>
+  </div>
+
+  <!-- ====== BUTTONS ====== -->
+  <div class="btn-row">
+    <button class="btn" onclick="resetAll()">🔄 重新来过</button>
+    <button class="btn" onclick="window.print()">🖨️ 打印清单</button>
+  </div>
+
+  <div style="text-align:center;color:var(--muted);font-size:.7rem;padding:20px;">
+    🛂 由 Claude Visa Assistant 生成 · {{DATE_GENERATED}}<br>
+    材料要求以官方最新公告为准 · 祝你旅途愉快 ✨
   </div>
 </div>
 
 <script>
+// ======== STATE ========
+const PROGRESS_MSGS = {
+  empty: '{{PROGRESS_EMPTY_MSG}}',
+  start: '{{PROGRESS_START_MSG}}',
+  halfway: '{{PROGRESS_HALFWAY_MSG}}',
+  almost: '{{PROGRESS_ALMOST_MSG}}',
+  done: '{{PROGRESS_DONE_MSG}}'
+};
+
 function updateProgress() {
   const all = document.querySelectorAll('#checklist input[type=checkbox]');
   const done = document.querySelectorAll('#checklist input[type=checkbox]:checked');
   const total = all.length;
-  const doneN = done.length;
-  const pct = total ? Math.round(doneN / total * 100) : 0;
+  const n = done.length;
+  const pct = total ? Math.round(n / total * 100) : 0;
 
-  document.getElementById('doneCount').textContent = doneN;
+  document.getElementById('doneCount').textContent = n;
   document.getElementById('totalCount').textContent = total;
   document.getElementById('progressFill').style.width = pct + '%';
 
-  // Update category counts
+  // Message
+  const msgEl = document.getElementById('progressMsg');
+  if (n === 0) msgEl.textContent = PROGRESS_MSGS.empty;
+  else if (n < total * 0.4) msgEl.textContent = PROGRESS_MSGS.start;
+  else if (n < total * 0.7) msgEl.textContent = PROGRESS_MSGS.halfway;
+  else if (n < total) msgEl.textContent = PROGRESS_MSGS.almost;
+  else {
+    msgEl.textContent = PROGRESS_MSGS.done;
+    if (n === total && !window._confettiFired) {
+      window._confettiFired = true;
+      celebrate();
+    }
+  }
+
+  // Per category counts
   document.querySelectorAll('.category').forEach(cat => {
     const catAll = cat.querySelectorAll('input[type=checkbox]');
     const catDone = cat.querySelectorAll('input[type=checkbox]:checked');
-    const countEl = cat.querySelector('.count');
+    const countEl = cat.querySelector('.cat-count');
     if (countEl) countEl.textContent = catDone.length + '/' + catAll.length;
   });
 
-  // Persist to localStorage
+  // Item done class
+  document.querySelectorAll('.item').forEach(item => {
+    const cb = item.querySelector('input[type=checkbox]');
+    if (cb && cb.checked) item.classList.add('done');
+    else item.classList.remove('done');
+  });
+
+  // Persist
   const state = {};
   document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
-    state['item-' + i] = cb.checked;
+    state['i' + i] = cb.checked;
   });
-  localStorage.setItem('visa-checklist-state', JSON.stringify(state));
+  localStorage.setItem('visa-checklist-' + '{{COUNTRY}}', JSON.stringify(state));
+
+  // Reset confetti flag if not all done
+  if (n < total) window._confettiFired = false;
 }
 
-function loadProgress() {
-  const state = JSON.parse(localStorage.getItem('visa-checklist-state') || '{}');
-  document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
-    if (state['item-' + i]) cb.checked = true;
-  });
+function loadState() {
+  const raw = localStorage.getItem('visa-checklist-' + '{{COUNTRY}}');
+  if (!raw) { updateProgress(); return; }
+  try {
+    const state = JSON.parse(raw);
+    document.querySelectorAll('#checklist input[type=checkbox]').forEach((cb, i) => {
+      if (state['i' + i]) cb.checked = true;
+    });
+  } catch(e) {}
   updateProgress();
 }
 
+function resetAll() {
+  if (confirm('确定要重置所有勾选记录吗？')) {
+    document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => cb.checked = false);
+    localStorage.removeItem('visa-checklist-' + '{{COUNTRY}}');
+    window._confettiFired = false;
+    updateProgress();
+  }
+}
+
+// ======== CELEBRATION ========
+function celebrate() {
+  const colors = ['{{PRIMARY_COLOR}}','{{SECONDARY_COLOR}}','{{ACCENT_COLOR}}','#ffd93d','#6bcb77','#ff6b6b','#4d96ff'];
+  const container = document.createElement('div');
+  container.className = 'confetti';
+  container.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:999;';
+  document.body.appendChild(container);
+
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.cssText = [
+        'left:' + Math.random() * 100 + '%',
+        'top:' + (-10 - Math.random() * 20) + 'px',
+        'background:' + colors[Math.floor(Math.random() * colors.length)],
+        'width:' + (6 + Math.random() * 10) + 'px',
+        'height:' + (6 + Math.random() * 10) + 'px',
+        'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
+        'animation-duration:' + (1.5 + Math.random() * 2.5) + 's',
+        'animation-delay:' + Math.random() * 0.5 + 's'
+      ].join(';');
+      container.appendChild(piece);
+    }, i * 30);
+  }
+
+  setTimeout(() => container.remove(), 3500);
+}
+
+// ======== INIT ========
 document.addEventListener('DOMContentLoaded', () => {
-  loadProgress();
+  loadState();
   document.querySelectorAll('#checklist input[type=checkbox]').forEach(cb => {
     cb.addEventListener('change', updateProgress);
   });
-});
-
-// Handle category header collapse
-document.querySelectorAll('.category-header').forEach(header => {
-  header.addEventListener('click', function(e) {
-    if (e.target.tagName === 'INPUT') return;
-    const items = this.nextElementSibling;
-    if (items) items.style.display = items.style.display === 'none' ? '' : 'none';
+  document.querySelectorAll('.cat-header').forEach(h => {
+    h.addEventListener('click', function(e) {
+      if (e.target.tagName === 'INPUT') return;
+      this.nextElementSibling?.classList.toggle('collapsed');
+    });
   });
 });
 </script>

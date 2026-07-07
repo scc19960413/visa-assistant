@@ -209,22 +209,34 @@ description: >
 
 ### 第四步：生成 HTML 可勾选清单 🔴
 
-完成对话输出后，**必须**生成一个可在浏览器打开、可逐项勾选的 HTML 清单文件。
+完成对话输出后，**必须**生成一个旅行杂志风格的 HTML 清单页面，让用户在阅读中感受目的地的魅力。
 
 **生成步骤：**
 
 1. 读取 `assets/checklist-template.html` 了解结构
-2. 将第三步的个性化内容填入模板
-3. 写入用户桌面或当前目录：`visa-checklist-{国家}-{日期}.html`
-4. 用 `open` 命令在浏览器中打开文件
+2. 读取 `references/destination-themes.md`，找到匹配的目的地主题配置
+3. 将主题变量填入模板的 `{{PLACEHOLDER}}`：
+   - 色彩系统：`{{PRIMARY_COLOR}}` `{{SECONDARY_COLOR}}` `{{ACCENT_COLOR}}`
+   - 视觉元素：`{{FLAG_EMOJI}}` `{{HERO_EMOJIS}}` `{{FOOD_EMOJIS}}`
+   - 文案：`{{GREETING}}` `{{FOOD_CULTURE_NOTE}}` `{{TRAVEL_QUOTE}}` `{{QUOTE_ATTRIBUTION}}`
+   - 进度激励语：`{{PROGRESS_EMPTY_MSG}}` 到 `{{PROGRESS_DONE_MSG}}`
+   - 目的地如不在主题文件中，使用「通用旅行主题」
+4. 将个性化材料清单填入 `{{CHECKLIST_HTML}}`，每项使用模板中的 item 结构
+5. 写入文件：`visa-checklist-{国家}-{日期}.html`
+6. 用 `open` 命令在浏览器中打开
 
-**HTML 清单要求：**
-- ✅ 每个材料前有可点击的 checkbox，勾选后有划线效果
-- 🟢🟡🔵⚠️ 四色标记和对话中一致
-- 顶部显示申请人关键信息和时间预算
-- 支持打印（隐藏 checkbox，显示打印版样式）
-- 数据纯静态，无需网络
-- 底部有准备进度条（自动计算完成百分比）
+**HTML 设计亮点：**
+- 🎨 顶部 Hero 区：国旗 + 目的地地标emoji插画 + 当地问候语
+- ✅ 自定义圆角checkbox：勾选时弹跳动画 + 划线 + 卡片变绿
+- 📊 飞行路径进度条：进度文案随完成度变化（如"过半了！你的效率比日本新干线还快 🚅"）
+- 🍽️ 目的地美食文化区：展示当地特色美食emoji + 一段诱人的描述
+- 💬 旅行名言：与该国文化相关的经典引语
+- 🎉 全部勾完时撒花庆祝动画
+- 🖨️ 支持打印
+- 💾 localStorage 保存勾选状态，刷新不丢失
+- 🎯 自动计算每类材料和总体的完成百分比
+
+**目标效果：用户打开页面后，不仅看到一份清单，还开始向往这次旅行。**
 
 ### 第五步：附加文档生成 ✍️
 
@@ -315,7 +327,8 @@ description: >
 ## Resources
 
 ### references/
-各国签证框架知识。在第二步读取对应文件。如文件不存在或信息可能过时，以 WebSearch 最新结果为准。
+各国签证框架知识 + 目的地主题配置。在第二步读取对应文件。如文件不存在或信息可能过时，以 WebSearch 最新结果为准。
+- `references/destination-themes.md` — 目的地视觉主题（色彩/emoji/名言/问候语），HTML生成时使用
 
 ### assets/
 - `assets/checklist-template.html` — HTML 清单模板，第四步使用
